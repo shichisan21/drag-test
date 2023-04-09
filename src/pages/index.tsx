@@ -16,13 +16,7 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main className={styles.main}>
-        <div className={styles.description}></div>
-
-        <div className={styles.center}>
-          <DragComponent />
-        </div>
-
-        <div className={styles.grid}></div>
+        <DragComponent />
       </main>
     </>
   );

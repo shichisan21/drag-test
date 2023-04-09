@@ -25,6 +25,7 @@ const Button = ({ id, text, index, moveButton }) => {
       if (item.id !== id) {
         moveButton(item.index, index);
         item.index = index;
+        item.id = id; // 新しい id を設定
       }
     },
     collect: (monitor) => ({
