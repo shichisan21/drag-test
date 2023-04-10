@@ -4,13 +4,13 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { FC } from "react";
 
 interface ButtonProps {
-  id: string;
+  id: number;
   text: string;
   index: number;
   moveButton: (dragIndex: number, hoverIndex: number) => void;
 }
 
-const Button = ({ id, text, index, moveButton }) => {
+const Button: FC<ButtonProps> = ({ id, text, index, moveButton }) => {
   const [{ isDragging }, drag] = useDrag({
     type: "button",
     item: { id, index },
@@ -21,7 +21,7 @@ const Button = ({ id, text, index, moveButton }) => {
 
   const [{ canDrop, isOver }, drop] = useDrop({
     accept: "button",
-    hover(item, monitor) {
+    hover(item: ButtonProps, monitor) {
       if (item.id !== id) {
         moveButton(item.index, index);
         item.index = index;
@@ -59,7 +59,7 @@ const DragComponent = () => {
     { id: 3, text: "Button 3" },
   ]);
 
-  const moveButton = (fromIndex, toIndex) => {
+  const moveButton = (fromIndex: number, toIndex: number) => {
     const newButtons = [...buttons];
     const [removed] = newButtons.splice(fromIndex, 1);
     newButtons.splice(toIndex, 0, removed);
