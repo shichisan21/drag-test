@@ -57,6 +57,7 @@ const DragComponent = () => {
     { id: 1, text: "Button 1" },
     { id: 2, text: "Button 2" },
     { id: 3, text: "Button 3" },
+    { id: 4, text: "Button 4" },
   ]);
 
   const moveButton = (fromIndex: number, toIndex: number) => {
