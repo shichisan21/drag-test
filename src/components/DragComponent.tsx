@@ -2,15 +2,16 @@ import { useState } from "react";
 import { DndProvider, useDrag, useDrop, DragSourceMonitor } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { FC } from "react";
+import Button from "@mui/material/Button";
 
 interface ButtonProps {
   id: number;
-  text: string;
   index: number;
   moveButton: (dragIndex: number, hoverIndex: number) => void;
+  text: string; // text プロパティを追加
 }
 
-const Button: FC<ButtonProps> = ({ id, text, index, moveButton }) => {
+const DraggableButton: FC<ButtonProps> = ({ id, text, index, moveButton }) => {
   const [{ isDragging }, drag] = useDrag({
     type: "button",
     item: { id, index },
@@ -40,14 +41,22 @@ const Button: FC<ButtonProps> = ({ id, text, index, moveButton }) => {
     <div
       ref={drop}
       className={`button ${isActive ? "highlight" : ""}`}
-      style={{ opacity: isDragging ? 0.5 : 1 }}
+      style={{ opacity: isDragging ? 0.5 : 1, margin: "10px 0" }}
     >
-      <div ref={drag} className='handle'>
-        <svg width='24' height='24' viewBox='0 0 24 24'>
+      <Button
+        variant='contained'
+        color='primary'
+        size='medium'
+        ref={drag}
+        className='handle'
+      >
+        {/* <div ref={drag} className='handle'>
+        <svg width='240' height='24' viewBox='0 0 24 24'>
           <path d='M 2.5 11 L 21.5 11 C 21.776142 11 22 11.223858 22 11.5 C 22 11.776142 21.776142 12 21.5 12 L 2.5 12 C 2.223858 12 2 11.776142 2 11.5 C 2 11.223858 2.223858 11 2.5 11 Z M 2.5 16 L 21.5 16 C 21.776142 16 22 16.223858 22 16.5 C 22 16.776142 21.776142 17 21.5 17 L 2.5 17 C 2.223858 17 2 16.776142 2 16.5 C 2 16.223858 2.223858 16 2.5 16 Z'></path>
         </svg>
-      </div>
-      {text}
+      </div> */}
+        {text}
+      </Button>
     </div>
   );
 };
@@ -73,12 +82,12 @@ const DragComponent = () => {
       <DndProvider backend={HTML5Backend}>
         <div className='buttons'>
           {buttons.map((button, index) => (
-            <Button
+            <DraggableButton
               key={button.id}
               id={button.id}
-              text={button.text}
               index={index}
               moveButton={moveButton}
+              text={button.text}
             />
           ))}
         </div>
