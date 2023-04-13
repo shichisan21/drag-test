@@ -61,7 +61,7 @@ const DraggableButton: FC<ButtonProps> = ({ id, text, index, moveButton }) => {
   );
 };
 
-const DragComponent = () => {
+const DragComponent: FC = () => {
   const [buttons, setButtons] = useState([
     { id: 1, text: "Button 1" },
     { id: 2, text: "Button 2" },

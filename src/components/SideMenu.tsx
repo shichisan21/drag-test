@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, FC } from "react";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItem";
@@ -7,7 +7,9 @@ import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
-const SideMenu = () => {
+interface SideMenuProps {}
+
+const SideMenu: FC<SideMenuProps> = () => {
   const [open, setOpen] = useState(false);
 
   const handleClick = () => {
