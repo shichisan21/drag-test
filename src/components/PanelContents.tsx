@@ -35,12 +35,9 @@ export const PanelContents = ({ value }: Props) => {
           bgcolor: "#cfe8fc",
           display: "flex",
           alignItems: "center",
-          justifyContent: "center",
         }}
       >
-        <Typography variant='body2' textAlign='center'>
-          aaaa
-        </Typography>
+        <Typography variant='body2'>aaaa</Typography>
       </Box>
     </Grid>
   );

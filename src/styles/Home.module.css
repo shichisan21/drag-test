@@ -319,8 +319,3 @@
   color: aqua;
   background-color: #a00;
 }
-
-.drawer {
-  /* width: 250px; */
-  flex-shrink: 0;
-}

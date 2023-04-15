@@ -19,7 +19,9 @@ export default function Home(): ReactElement {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <SideMenu />
+      <div>
+        <SideMenu />
+      </div>
       <main className={styles.main}>
         <DragComponent />
         <Grid container spacing={2}>

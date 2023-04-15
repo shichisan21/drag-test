@@ -7,6 +7,8 @@ import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import styles from "@/styles/Home.module.css";
+import { Routes, Link, Route } from "react-router-dom";
+import { PanelContents } from "./PanelContents";
 
 interface SideMenuProps {}
 
@@ -18,16 +20,17 @@ const SideMenu: FC<SideMenuProps> = () => {
   };
 
   return (
-    <Drawer
-      anchor='left'
-      open={true}
-      variant='persistent'
-      classes={{ paper: styles.drawer }}
-    >
+    <Drawer anchor='left' open={true} variant='persistent'>
       <List>
-        <ListItemButton>About</ListItemButton>
-        <ListItemButton>Page1</ListItemButton>
-        <ListItemButton>Page2</ListItemButton>
+        <ListItemButton component={Link} to='/'>
+          <ListItemText primary='Home' />
+        </ListItemButton>
+        <ListItemButton component={Link} to='/'>
+          <ListItemText primary='Home' />
+        </ListItemButton>
+        <ListItemButton component={Link} to='/'>
+          <ListItemText primary='Home' />
+        </ListItemButton>
         <ListItemButton onClick={handleClick}>
           <ListItemText primary='PageA' />
           {open ? <ExpandLess /> : <ExpandMore />}
@@ -40,6 +43,9 @@ const SideMenu: FC<SideMenuProps> = () => {
           </List>
         </Collapse>
       </List>
+      <Routes>
+        <Route path='/' element={<PanelContents value='apple' />} />
+      </Routes>
     </Drawer>
   );
 };
