@@ -204,13 +204,21 @@
   }
 
   .description {
-    font-size: 0.8rem;
+    display: inherit;
+    justify-content: inherit;
+    align-items: inherit;
+    font-size: 0.85rem;
+    max-width: var(--max-width);
+    width: 100%;
+    z-index: 2;
+    font-family: var(--font-mono);
   }
-
   .description a {
-    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
   }
-
   .description p,
   .description div {
     display: flex;
@@ -310,4 +318,9 @@
 .button .highlight {
   color: aqua;
   background-color: #a00;
+}
+
+.drawer {
+  /* width: 250px; */
+  flex-shrink: 0;
 }

@@ -6,6 +6,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import styles from "@/styles/Home.module.css";
 
 interface SideMenuProps {}
 
@@ -17,7 +18,12 @@ const SideMenu: FC<SideMenuProps> = () => {
   };
 
   return (
-    <Drawer anchor='left' open={true} variant='persistent'>
+    <Drawer
+      anchor='left'
+      open={true}
+      variant='persistent'
+      classes={{ paper: styles.drawer }}
+    >
       <List>
         <ListItemButton>About</ListItemButton>
         <ListItemButton>Page1</ListItemButton>
