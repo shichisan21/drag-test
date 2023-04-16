@@ -22,7 +22,9 @@ const SideMenu: FC<SideMenuProps> = () => {
     <Drawer anchor='left' open={true} variant='persistent'>
       <List>
         <ListItemButton>About</ListItemButton>
-        <ListItemButton>Page1</ListItemButton>
+        <Link href='/about'>
+          <ListItemButton>Page1</ListItemButton>
+        </Link>
         <Link href='/about'>
           <ListItemButton>Page2</ListItemButton>
         </Link>
