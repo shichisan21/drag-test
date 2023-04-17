@@ -10,7 +10,32 @@ import { Grid } from "@mui/material";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home(): ReactElement {
-  const fruits = ["apple", "banana", "orange"];
+  const fruits = [
+    {
+      id: 1,
+      name: "apple",
+      price: 100,
+      area: "Aomori",
+    },
+    {
+      id: 2,
+      name: "banana",
+      price: 200,
+      area: "Okinawa",
+    },
+    {
+      id: 3,
+      name: "orange",
+      price: 300,
+      area: "Wakayama",
+    },
+    {
+      id: 4,
+      name: "Strawberry",
+      price: 300,
+      area: "Shizuoka",
+    },
+  ];
   return (
     <div>
       <Head>
@@ -26,7 +51,7 @@ export default function Home(): ReactElement {
         <DragComponent />
         <Grid container spacing={2}>
           {fruits.map((value) => (
-            <PanelContents key={value} value={value} />
+            <PanelContents key={value.id} value={value} />
           ))}
         </Grid>
       </main>

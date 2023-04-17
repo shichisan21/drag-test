@@ -1,12 +1,25 @@
 import { Box, Grid, Paper, Typography } from "@mui/material";
-import { InfoOutlined } from "@mui/icons-material";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { FC } from "react";
 
-interface Props {
-  value: string;
+interface Fruits {
+  id: number;
+  name: string;
+  price: number;
+  area: string;
 }
-export const PanelContents = ({ value }: Props) => {
+
+interface PanelContentsProps {
+  value: Fruits;
+}
+
+export const PanelContents: FC<PanelContentsProps> = ({
+  value,
+}: {
+  value: Fruits;
+}) => {
   return (
-    <Grid key={value} item xs={4} alignItems={"stretch"}>
+    <Grid item xs={4} alignItems={"stretch"}>
       <Paper
         sx={{
           p: 2,
@@ -17,15 +30,13 @@ export const PanelContents = ({ value }: Props) => {
         elevation={0}
       >
         <Typography variant='body2'>
-          <InfoOutlined sx={{ marginRight: 1 }} />
+          <InfoOutlinedIcon sx={{ marginRight: 1 }} />
           <Typography variant='h6' component='span' justifyContent={"center"}>
-            {value}
+            {value.id}
+            {value.name}
+            {value.price}
+            {value.area}
           </Typography>
-          <br />
-          {`Cras mattis consectetur purus sit amet fermentum.
-          Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-          Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-          Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`}
         </Typography>
       </Paper>
       <Box
