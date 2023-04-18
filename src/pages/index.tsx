@@ -1,11 +1,10 @@
 import { ReactElement } from "react";
 import Head from "next/head";
 import { Inter } from "next/font/google";
-import styles from "@/styles/Home.module.css";
 import DragComponent from "@/components/DragComponent";
 import SideMenu from "@/components/SideMenu";
 import { PanelContents } from "@/components/PanelContents";
-import { Grid } from "@mui/material";
+import { Grid, Box } from "@mui/material";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -44,17 +43,17 @@ export default function Home(): ReactElement {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <div>
+      <Box display={"flex"}>
         <SideMenu />
-      </div>
-      <main className={styles.main}>
-        <DragComponent />
-        <Grid container spacing={2}>
-          {fruits.map((value) => (
-            <PanelContents key={value.id} value={value} />
-          ))}
-        </Grid>
-      </main>
+        <Box flexGrow={1}>
+          <DragComponent />
+          <Grid container spacing={2}>
+            {fruits.map((value) => (
+              <PanelContents key={value.id} value={value} />
+            ))}
+          </Grid>
+        </Box>
+      </Box>
     </div>
   );
 }

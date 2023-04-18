@@ -19,7 +19,7 @@ const SideMenu: FC<SideMenuProps> = () => {
   };
 
   return (
-    <Drawer anchor='left' open={true} variant='persistent'>
+    <Drawer anchor='left' open={true} variant='persistent' sx={{ width: 240 }}>
       <List>
         <ListItemButton>About</ListItemButton>
         <Link href='/about'>
