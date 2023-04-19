@@ -22,7 +22,12 @@ const SideMenu: FC<SideMenuProps> = () => {
     <Drawer anchor='left' open={true} variant='persistent' sx={{ width: 240 }}>
       <List>
         <ListItemButton>About</ListItemButton>
-        <Link href='/about'>
+        <Link
+          href={{
+            pathname: "/about",
+            query: { fruits: ["apple", "banana", "orange"] },
+          }}
+        >
           <ListItemButton>Page1</ListItemButton>
         </Link>
         <Link href='/about'>
