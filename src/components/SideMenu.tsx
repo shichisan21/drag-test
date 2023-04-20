@@ -18,6 +18,9 @@ const SideMenu: FC<SideMenuProps> = () => {
     setOpen(!open);
   };
 
+  const testParameter = "test";
+  const address = `/post/${testParameter}`;
+
   return (
     <Drawer anchor='left' open={true} variant='persistent' sx={{ width: 240 }}>
       <List>
@@ -30,7 +33,7 @@ const SideMenu: FC<SideMenuProps> = () => {
         >
           <ListItemButton>Page1</ListItemButton>
         </Link>
-        <Link href='/about'>
+        <Link href={address}>
           <ListItemButton>Page2</ListItemButton>
         </Link>
         <ListItemButton onClick={handleClick}>
