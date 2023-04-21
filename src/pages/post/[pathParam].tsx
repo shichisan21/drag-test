@@ -1,11 +1,7 @@
-import { useRouter, NextRouter } from "next/router";
-import React, { FC } from "react";
+import { useRouter } from "next/router";
 
-interface TestPathParamProps {
-  router: NextRouter;
-}
-
-const TestPathParam: FC<TestPathParamProps> = ({ router }) => {
+const TestPathParam = () => {
+  const router = useRouter();
   const { pathParam } = router.query;
   return (
     <div>
