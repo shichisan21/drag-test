@@ -24,6 +24,12 @@
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "18.2.0",
     "react-router-dom": "^6.10.0",
+    "react-table": "^7.8.0",
+    "react-window": "^1.8.9",
     "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "@types/react-table": "^7.7.14",
+    "@types/react-window": "^1.8.5"
   }
 }
