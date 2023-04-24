@@ -33,6 +33,14 @@ const SideMenu: FC<SideMenuProps> = () => {
         >
           <ListItemButton>Page1</ListItemButton>
         </Link>
+        <Link
+          href={{
+            pathname: "/listPage",
+            query: { fruits: ["apple", "banana", "orange"] },
+          }}
+        >
+          <ListItemButton>ListPage</ListItemButton>
+        </Link>
         <Link href={address}>
           <ListItemButton>Page2</ListItemButton>
         </Link>
