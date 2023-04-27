@@ -24,7 +24,14 @@ const SideMenu: FC<SideMenuProps> = () => {
   return (
     <Drawer anchor='left' open={true} variant='persistent' sx={{ width: 240 }}>
       <List>
-        <ListItemButton>About</ListItemButton>
+        <Link
+          href={{
+            pathname: "/dragAndDrop",
+            query: { fruits: ["apple", "banana", "orange"] },
+          }}
+        >
+          <ListItemButton>D and D</ListItemButton>
+        </Link>
         <Link
           href={{
             pathname: "/about",
