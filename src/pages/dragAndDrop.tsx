@@ -15,9 +15,14 @@ const DragAndDrop: FC<DragAndDropProps> = ({ fruits }): ReactElement => {
     const file = event.dataTransfer.files[0];
     if (file.type === "text/csv") {
       const reader = new FileReader();
-      reader.onload = (event: ProgressEvent<FileReader>) => {
+      reader.onload = async (event: ProgressEvent<FileReader>) => {
         const text = event.target?.result;
         setFileContent(text as string);
+        // if (/\<script\>.*\<\/script\>/i.test(text as string)) {
+        //   alert("Script is not allowed");
+        // } else {
+        //   setFileContent(text as string);
+        // }
       };
       reader.readAsText(file);
       const timestamp = new Date().getTime();
