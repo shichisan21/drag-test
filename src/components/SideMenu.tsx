@@ -27,7 +27,25 @@ const SideMenu: FC<SideMenuProps> = () => {
         <Link
           href={{
             pathname: "/dragAndDrop",
-            query: { fruits: ["apple", "banana", "orange"] },
+            query: {
+              fruits: [
+                "grape",
+                "kiwi",
+                "pineapple",
+                "pear",
+                "mango",
+                "watermelon",
+                "peach",
+                "plum",
+                "cherry",
+                "strawberry",
+                "raspberry",
+                "blueberry",
+                "blackberry",
+                "apricot",
+                "nectarine",
+              ],
+            },
           }}
         >
           <ListItemButton>D and D</ListItemButton>
