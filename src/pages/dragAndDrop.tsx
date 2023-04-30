@@ -9,7 +9,7 @@ interface DragAndDropProps {
 const DragAndDrop: FC<DragAndDropProps> = ({ fruits }): ReactElement => {
   const [isDropped, setIsDropped] = useState<boolean>(false);
   const [fileContent, setFileContent] = useState<string>();
-  const [dropTimeStamp, setDropTimeStamp] = useState<number>();
+  const [dropTimeStamp, setDropTimeStamp] = useState<string>();
   const [droppedBoxId, setDroppedBoxId] = useState<string>();
 
   const handleDrop = (
@@ -22,16 +22,17 @@ const DragAndDrop: FC<DragAndDropProps> = ({ fruits }): ReactElement => {
       const reader = new FileReader();
       reader.onload = async (event: ProgressEvent<FileReader>) => {
         const text = event.target?.result;
-        setFileContent(text as string);
-        // if (/\<script\>.*\<\/script\>/i.test(text as string)) {
-        //   alert("Script is not allowed");
-        // } else {
-        //   setFileContent(text as string);
-        // }
+        if (/\<script\>.*\<\/script\>/i.test(text as string)) {
+          alert("Script is not allowed");
+        } else {
+          setFileContent(text as string);
+        }
       };
       reader.readAsText(file);
       const timestamp = new Date().getTime();
-      setDropTimeStamp(timestamp);
+      setDropTimeStamp(
+        new Date(timestamp).toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })
+      );
 
       setIsDropped(true); // <- ここで状態を更新する
       setDroppedBoxId(boxId);
@@ -63,7 +64,7 @@ const DragAndDrop: FC<DragAndDropProps> = ({ fruits }): ReactElement => {
           {fruits.map((fruit, index) => (
             <Grid key={index} item xs={2} sm={2} md={2} lg={2}>
               <Box
-                id={`box-${index + 1}`}
+                id={`Box-No.${index + 1}`}
                 sx={{
                   height: 100,
                   border: "1px solid black",
@@ -71,7 +72,7 @@ const DragAndDrop: FC<DragAndDropProps> = ({ fruits }): ReactElement => {
                   alignItems: "center",
                   justifyContent: "center",
                 }}
-                onDrop={(event) => handleDrop(event, `box-${index + 1}`)}
+                onDrop={(event) => handleDrop(event, `Box-No.${index + 1}`)}
                 onDragOver={(event) => event.preventDefault()}
               >
                 <Typography variant='body1'>{fruit}</Typography>
@@ -80,16 +81,6 @@ const DragAndDrop: FC<DragAndDropProps> = ({ fruits }): ReactElement => {
           ))}
         </Grid>
       </Box>
-      {/* <div>
-        <h1>testDragAndDrop</h1>
-      </div>
-      <div onDrop={handleDrop} onDragOver={(event) => event.preventDefault()}>
-        <ul>
-          {fruits.map((fruit) => (
-            <li key={fruit}>{fruit}</li>
-          ))}
-        </ul>
-      </div> */}
     </>
   );
 };
