@@ -11,6 +11,21 @@ const DragAndDrop: FC<DragAndDropProps> = ({ fruits }): ReactElement => {
   const [fileContent, setFileContent] = useState<string>();
   const [dropTimeStamp, setDropTimeStamp] = useState<string>();
   const [droppedBoxId, setDroppedBoxId] = useState<string>();
+  const [highlightedBoxId, setHighlightedBoxId] = useState<string>("");
+
+  const handleDragEnter = (
+    event: React.DragEvent<HTMLDivElement>,
+    boxId: string
+  ): void => {
+    event.preventDefault();
+    event.stopPropagation();
+    setHighlightedBoxId(boxId);
+  };
+
+  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>): void => {
+    event.preventDefault();
+    setHighlightedBoxId("");
+  };
 
   const handleDrop = (
     event: React.DragEvent<HTMLDivElement>,
@@ -71,9 +86,20 @@ const DragAndDrop: FC<DragAndDropProps> = ({ fruits }): ReactElement => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  backgroundColor:
+                    highlightedBoxId === `Box-No.${index + 1}`
+                      ? "lightgray"
+                      : undefined,
                 }}
                 onDrop={(event) => handleDrop(event, `Box-No.${index + 1}`)}
-                onDragOver={(event) => event.preventDefault()}
+                onDragOver={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }}
+                onDragEnter={(event) =>
+                  handleDragEnter(event, `Box-No.${index + 1}`)
+                }
+                onDragLeave={(event) => handleDragLeave(event)}
               >
                 <Typography variant='body1'>{fruit}</Typography>
               </Box>
