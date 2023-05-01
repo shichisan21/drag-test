@@ -17,13 +17,12 @@ const DragAndDrop: FC<DragAndDropProps> = ({ fruits }): ReactElement => {
     event: React.DragEvent<HTMLDivElement>,
     boxId: string
   ): void => {
-    event.preventDefault();
     event.stopPropagation();
     setHighlightedBoxId(boxId);
   };
 
   const handleDragLeave = (event: React.DragEvent<HTMLDivElement>): void => {
-    event.preventDefault();
+    event.stopPropagation();
     setHighlightedBoxId("");
   };
 
@@ -61,7 +60,10 @@ const DragAndDrop: FC<DragAndDropProps> = ({ fruits }): ReactElement => {
       </Box>
       <Box
         sx={{ backgroundColor: "#f0f0f0", p: 2 }}
-        onDragOver={(event) => event.preventDefault()}
+        onDragOver={(event) => {
+          event.preventDefault();
+          event.stopPropagation();
+        }}
       >
         {fileContent && (
           <>
@@ -92,14 +94,14 @@ const DragAndDrop: FC<DragAndDropProps> = ({ fruits }): ReactElement => {
                       : undefined,
                 }}
                 onDrop={(event) => handleDrop(event, `Box-No.${index + 1}`)}
-                onDragOver={(event) => {
-                  event.preventDefault();
+                onDragEnter={(event) => {
+                  handleDragEnter(event, `Box-No.${index + 1}`);
                   event.stopPropagation();
                 }}
-                onDragEnter={(event) =>
-                  handleDragEnter(event, `Box-No.${index + 1}`)
-                }
-                onDragLeave={(event) => handleDragLeave(event)}
+                onDragLeave={(event) => {
+                  handleDragLeave(event);
+                  event.stopPropagation();
+                }}
               >
                 <Typography variant='body1'>{fruit}</Typography>
               </Box>
