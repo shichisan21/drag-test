@@ -1,6 +1,7 @@
 import { FC, ReactElement, useState } from "react";
 import { useRouter } from "next/router";
 import { Box, Grid, Typography } from "@mui/material";
+import { handleDragEnter, handleDragLeave } from "@/utils/dragAndDropHandlers";
 
 interface DragAndDropProps {
   fruits: string[];
@@ -12,19 +13,6 @@ const DragAndDrop: FC<DragAndDropProps> = ({ fruits }): ReactElement => {
   const [dropTimeStamp, setDropTimeStamp] = useState<string>();
   const [droppedBoxId, setDroppedBoxId] = useState<string>();
   const [highlightedBoxId, setHighlightedBoxId] = useState<string>("");
-
-  const handleDragEnter = (
-    event: React.DragEvent<HTMLDivElement>,
-    boxId: string
-  ): void => {
-    event.stopPropagation();
-    setHighlightedBoxId(boxId);
-  };
-
-  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>): void => {
-    event.stopPropagation();
-    setHighlightedBoxId("");
-  };
 
   const handleDrop = (
     event: React.DragEvent<HTMLDivElement>,
@@ -94,12 +82,15 @@ const DragAndDrop: FC<DragAndDropProps> = ({ fruits }): ReactElement => {
                       : undefined,
                 }}
                 onDrop={(event) => handleDrop(event, `Box-No.${index + 1}`)}
-                onDragEnter={(event) => {
-                  handleDragEnter(event, `Box-No.${index + 1}`);
-                  event.stopPropagation();
-                }}
+                onDragEnter={(event) =>
+                  handleDragEnter(
+                    event,
+                    `Box-No.${index + 1}`,
+                    setHighlightedBoxId
+                  )
+                }
                 onDragLeave={(event) => {
-                  handleDragLeave(event);
+                  handleDragLeave(event, setHighlightedBoxId);
                   event.stopPropagation();
                 }}
               >
