@@ -92,7 +92,8 @@ const DragAndDrop: FC<DragAndDropProps> = ({ fruits }): ReactElement => {
 
 const DragAndDropWrapper: FC = (): ReactElement => {
   const router = useRouter();
-  return <DragAndDrop fruits={router.query.fruits as string[]} />;
+  const fruits = (router.query.fruits as string[]) ?? [];
+  return <DragAndDrop fruits={fruits} />;
 };
 
 export default DragAndDropWrapper;
