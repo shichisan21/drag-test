@@ -26,6 +26,13 @@ const SideMenu: FC<SideMenuProps> = () => {
       <List>
         <Link
           href={{
+            pathname: "/addArea",
+          }}
+        >
+          <ListItemButton>AddArea</ListItemButton>
+        </Link>
+        <Link
+          href={{
             pathname: "/dragAndDrop",
             query: {
               fruits: [
