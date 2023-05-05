@@ -3,46 +3,53 @@ import { useRouter } from "next/router";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
-const AddArea: FC<{ onClick: () => void; label: string }> = ({
-  onClick,
-  label,
-}): ReactElement => {
+interface ButtonState {
+  label: string;
+  isExtended: boolean;
+}
+
+const AddArea: FC<{
+  onClick: () => void;
+  label: string;
+  isExtended: boolean;
+}> = ({ onClick, label, isExtended }): ReactElement => {
   return (
     <Button variant='contained' onClick={onClick} sx={{ margin: 2 }}>
       {label}
+      {isExtended && " (拡大中)"}
     </Button>
   );
 };
 
 const MyComponent: FC = (): ReactElement => {
-  const [showExtended, setShowExtended] = useState(false);
-  const [extendedIndex, setExtendedIndex] = useState<number | null>(null);
+  const [buttons, setButtons] = useState<ButtonState[]>([
+    { label: "ボタン1", isExtended: false },
+    { label: "ボタン2", isExtended: false },
+    { label: "ボタン3", isExtended: false },
+  ]);
 
   const toggleExtended = (index: number) => {
-    setShowExtended(!showExtended);
-    setExtendedIndex(index);
+    const newButtons = [...buttons];
+    newButtons[index].isExtended = !newButtons[index].isExtended;
+    setButtons(newButtons);
   };
 
   return (
     <Box display='flex' flexDirection='column'>
-      <AddArea onClick={() => toggleExtended(1)} label='ボタン1' />
-      {showExtended && extendedIndex === 1 && (
-        <Box sx={{ backgroundColor: "lightblue", color: "white" }}>
-          <p>Extended</p>
-        </Box>
-      )}
-      <AddArea onClick={() => toggleExtended(2)} label='ボタン2' />
-      {showExtended && extendedIndex === 2 && (
-        <Box sx={{ backgroundColor: "lightblue", color: "white" }}>
-          <p>Extended</p>
-        </Box>
-      )}
-      <AddArea onClick={() => toggleExtended(3)} label='ボタン3' />
-      {showExtended && extendedIndex === 3 && (
-        <Box sx={{ backgroundColor: "lightblue", color: "white" }}>
-          <p>Extended</p>
-        </Box>
-      )}
+      {buttons.map((button, index) => (
+        <div key={index}>
+          <AddArea
+            onClick={() => toggleExtended(index)}
+            label={button.label}
+            isExtended={button.isExtended}
+          />
+          {button.isExtended && (
+            <Box sx={{ backgroundColor: "lightblue", color: "white" }}>
+              <p>Extendedエリア({button.label})</p>
+            </Box>
+          )}
+        </div>
+      ))}
     </Box>
   );
 };
