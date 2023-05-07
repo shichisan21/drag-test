@@ -1,4 +1,4 @@
-import { FC, ReactElement } from "react";
+import { FC, ReactElement, useState } from "react";
 import { useRouter } from "next/router";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
@@ -19,7 +19,7 @@ const ListPage: FC<ListPageProps> = ({ fruits }): ReactElement => {
         id: index,
         name: fruit,
         price: Math.floor(Math.random() * 1000) + 1,
-        description: `A delicious ${fruit} that is great for snacking.`,
+        description: `おいしい${fruit}、おやつに最適です。`,
       }))
     : [];
   return (
@@ -32,11 +32,26 @@ const ListPage: FC<ListPageProps> = ({ fruits }): ReactElement => {
 const ListPageWrapper: FC = (): ReactElement => {
   const router = useRouter();
   const { fruits } = router.query;
+  const [selectedOption, setSelectedOption] = useState("");
+
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedOption(event.target.value);
+  };
+
   if (!fruits) {
     return <></>;
   }
 
-  return <ListPage fruits={fruits as string[]} />;
+  return (
+    <div>
+      <select value={selectedOption} onChange={handleSelectChange}>
+        <option value='option1'>セレクト1</option>
+        <option value='option2'>セレクト2</option>
+        <option value='option3'>セレクト3</option>
+      </select>
+      <ListPage fruits={fruits as string[]} />
+    </div>
+  );
 };
 
 export default ListPageWrapper;
