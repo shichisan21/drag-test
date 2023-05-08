@@ -1,6 +1,7 @@
-import { FC, ReactElement, useState } from "react";
+import { FC, ReactElement, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { Select, MenuItem, SelectChangeEvent } from "@mui/material";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 70 },
@@ -23,7 +24,7 @@ const ListPage: FC<ListPageProps> = ({ fruits }): ReactElement => {
       }))
     : [];
   return (
-    <div style={{ height: 900, width: "100%" }}>
+    <div style={{ height: 600, width: "70%" }}>
       <DataGrid rows={rows} columns={columns} />
     </div>
   );
@@ -34,9 +35,19 @@ const ListPageWrapper: FC = (): ReactElement => {
   const { fruits } = router.query;
   const [selectedOption, setSelectedOption] = useState("");
 
-  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSelectChange = (event: SelectChangeEvent<string>) => {
     setSelectedOption(event.target.value);
   };
+
+  useEffect(() => {
+    const storedOption = localStorage.getItem("selectedOption");
+    if (storedOption) {
+      setSelectedOption(storedOption);
+    }
+  }, []);
+  useEffect(() => {
+    localStorage.setItem("selectedOption", selectedOption);
+  }, [selectedOption]);
 
   if (!fruits) {
     return <></>;
@@ -44,12 +55,14 @@ const ListPageWrapper: FC = (): ReactElement => {
 
   return (
     <div>
-      <select value={selectedOption} onChange={handleSelectChange}>
-        <option value='option1'>セレクト1</option>
-        <option value='option2'>セレクト2</option>
-        <option value='option3'>セレクト3</option>
-      </select>
-      <ListPage fruits={fruits as string[]} />
+      <Select value={selectedOption} onChange={handleSelectChange}>
+        <MenuItem value='option1'>セレクト1</MenuItem>
+        <MenuItem value='option2'>セレクト2</MenuItem>
+        <MenuItem value='option3'>セレクト3</MenuItem>
+      </Select>
+      {selectedOption === "option1" && <ListPage fruits={fruits as string[]} />}
+      {selectedOption === "option2" && <div>セレクト2が選択されました。</div>}
+      {selectedOption === "option3" && <div>セレクト3が選択されました。</div>}
     </div>
   );
 };
