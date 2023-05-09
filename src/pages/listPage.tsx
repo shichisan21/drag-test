@@ -38,15 +38,21 @@ const ListPage: FC<ListPageProps> = ({ fruits, searchText }): ReactElement => {
       : [];
 
     setHighlightedRows(highlightedIndexes);
-  }, [fruits]);
+  }, [searchText]);
+  console.log(highlightedRows);
 
   return (
     <div style={{ height: 600, width: "70%" }}>
       <DataGrid
         rows={rows}
         columns={columns}
+        sx={{
+          "& .highlightedRow": {
+            background: "#2C7CFF !important",
+          },
+        }}
         getRowClassName={(params: GridRowParams) =>
-          params.id !== -1 && highlightedRows.includes(params.row)
+          params.id !== -1 && highlightedRows.includes(params.id)
             ? "highlightedRow"
             : ""
         }
