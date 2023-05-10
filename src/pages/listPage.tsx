@@ -40,6 +40,7 @@ const ListPage: FC<ListPageProps> = ({ fruits, searchText }): ReactElement => {
     setHighlightedRows(highlightedIndexes);
   }, [searchText]);
   console.log(highlightedRows);
+  const blueStyle = "#2C7CFF";
 
   return (
     <div style={{ height: 600, width: "70%" }}>
@@ -48,10 +49,10 @@ const ListPage: FC<ListPageProps> = ({ fruits, searchText }): ReactElement => {
         columns={columns}
         sx={{
           "& .highlightedRow": {
-            background: "#2C7CFF !important",
+            background: `${blueStyle} !important`,
           },
         }}
-        getRowClassName={(params: GridRowParams) =>
+        getRowClassName={(params) =>
           params.id !== -1 && highlightedRows.includes(params.id)
             ? "highlightedRow"
             : ""
