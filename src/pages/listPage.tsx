@@ -52,7 +52,7 @@ const ListPage: FC<ListPageProps> = ({ fruits, searchText }): ReactElement => {
             background: `${blueStyle} !important`,
           },
         }}
-        getRowClassName={(params) =>
+        getRowClassName={(params: any): string =>
           params.id !== -1 && highlightedRows.includes(params.id)
             ? "highlightedRow"
             : ""

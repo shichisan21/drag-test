@@ -26,7 +26,14 @@ const SideMenu: FC<SideMenuProps> = () => {
       <List>
         <Link
           href={{
-            pathname: "/addArea",
+            pathname: "/objectToList",
+          }}
+        >
+          <ListItemButton>ObjectToList</ListItemButton>
+        </Link>
+        <Link
+          href={{
+            pathname: "/objectToList",
           }}
         >
           <ListItemButton>AddArea</ListItemButton>
