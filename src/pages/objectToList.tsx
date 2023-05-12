@@ -8,6 +8,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { DateGenerate } from "@/components/DateGenerate";
 
 interface ObjectToList {
   date: string;
@@ -121,30 +122,33 @@ const ObjectToList: React.FC = () => {
   });
 
   return (
-    <TableContainer>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Date</TableCell>
-            {groupHeaders.map((group) => (
-              <TableCell key={group}>{group}</TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {dateHeaders.map((date) => (
-            <TableRow key={date}>
-              <TableCell>{date}</TableCell>
+    <>
+      <DateGenerate groupHeaders={groupHeaders} />
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Date</TableCell>
               {groupHeaders.map((group) => (
-                <TableCell key={`${date}-${group}`}>
-                  {tableData[date][group]}
-                </TableCell>
+                <TableCell key={group}>{group}</TableCell>
               ))}
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {dateHeaders.map((date) => (
+              <TableRow key={date}>
+                <TableCell>{date}</TableCell>
+                {groupHeaders.map((group) => (
+                  <TableCell key={`${date}-${group}`}>
+                    {tableData[date][group]}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 };
 
