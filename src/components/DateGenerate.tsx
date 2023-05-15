@@ -1,13 +1,24 @@
 import { FC } from "react";
 
-interface DateGenerateProps {
-  groupHeaders: string[];
+interface CityData {
+  [key: string]: string | undefined;
+}
+interface GroupData {
+  date: string;
+  group: string;
+  city: CityData[];
 }
 
-export const DateGenerate: FC<DateGenerateProps> = ({ groupHeaders }) => {
+// Define DateGenerateProps
+interface DateGenerateProps {
+  data: GroupData[];
+}
+
+export const DateGenerate: FC<DateGenerateProps> = ({ data }) => {
+  console.log(data);
   return (
     <div>
-      <h1>{groupHeaders}</h1>
+      <h1>receive</h1>
     </div>
   );
 };

@@ -32,14 +32,17 @@ const ObjectToList: React.FC = () => {
           matsumoto: "soba",
           asahi: "yasai",
           shiojiri: "wine",
+          headers: "test",
         },
         {
           suwa: "sake",
           okaya: "tokei",
+          headers: "test2",
         },
         {
           hakuba: "ski",
           otari: "mingei",
+          headers: "test3",
         },
       ],
     },
@@ -101,6 +104,22 @@ const ObjectToList: React.FC = () => {
       ],
     },
   ];
+
+  const objectList = {
+    hyogo: "kobe",
+    oosaka: "umeda",
+    tokyo: [
+      {
+        chiyoda: "kanda",
+        tama: "nagayama",
+      },
+      {
+        USA: "texas",
+        France: "paris",
+      },
+    ],
+  };
+
   // 列のヘッダを取得
   const groupHeaders = Array.from(new Set(data.map((item) => item.group)));
 
@@ -121,9 +140,24 @@ const ObjectToList: React.FC = () => {
     });
   });
 
+  const headers = data.flatMap((item) =>
+    item.city
+      .map((city) => ("headers" in city ? city.headers : undefined))
+      .filter((header): header is string => header !== undefined)
+  );
+
   return (
     <>
-      <DateGenerate groupHeaders={groupHeaders} />
+      <ul>
+        {objectList.tokyo.map((item, index) => (
+          <li key={index}>
+            {Object.entries(item)
+              .map(([key, value]) => `${key}: ${value}`)
+              .join(", ")}
+          </li>
+        ))}
+      </ul>
+      <DateGenerate data={data} />
       <TableContainer>
         <Table>
           <TableHead>
