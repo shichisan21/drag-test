@@ -120,6 +120,12 @@ const ObjectToList: React.FC = () => {
     ],
   };
 
+  const [clickedText, setClickedText] = useState("");
+
+  const handleClick = (text: string) => {
+    setClickedText(text);
+  };
+
   // 列のヘッダを取得
   const groupHeaders = Array.from(new Set(data.map((item) => item.group)));
 
@@ -148,6 +154,7 @@ const ObjectToList: React.FC = () => {
 
   return (
     <>
+      <p>{clickedText}</p>
       <ul>
         {objectList.tokyo.map((item, index) => (
           <li key={index}>
@@ -173,7 +180,10 @@ const ObjectToList: React.FC = () => {
               <TableRow key={date}>
                 <TableCell>{date}</TableCell>
                 {groupHeaders.map((group) => (
-                  <TableCell key={`${date}-${group}`}>
+                  <TableCell
+                    key={`${date}-${group}`}
+                    onClick={() => handleClick(tableData[date][group])}
+                  >
                     {tableData[date][group]}
                   </TableCell>
                 ))}
