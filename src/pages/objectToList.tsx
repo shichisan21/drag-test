@@ -10,6 +10,10 @@ import {
 } from "@mui/material";
 import { DateGenerate } from "@/components/DateGenerate";
 
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { useDrag, useDrop } from "react-dnd";
+
 interface ObjectToList {
   date: string;
   group: string;
@@ -20,6 +24,12 @@ interface TableData {
   [date: string]: {
     [group: string]: string;
   };
+}
+
+interface DragItem {
+  value: string;
+  date: string;
+  group: string;
 }
 
 const ObjectToList: React.FC = () => {
@@ -131,20 +141,71 @@ const ObjectToList: React.FC = () => {
 
   // 行のヘッダを取得
   const dateHeaders = Array.from(new Set(data.map((item) => item.date)));
+  const [tableData, setTableData] = useState<TableData>({});
 
-  // 行と列のヘッダを含めた表のデータを作成
-  const tableData: TableData = {};
-  dateHeaders.forEach((date) => {
-    tableData[date] = {};
-    groupHeaders.forEach((group) => {
-      const item = data.find((d) => d.date === date && d.group === group);
-      if (item) {
-        tableData[date][group] = item.city
-          .map((city) => Object.values(city)[0])
-          .join(", ");
-      }
+  // 表のデータの作成は useEffect 内で行うべきです
+  useEffect(() => {
+    const newTableData: TableData = {};
+
+    dateHeaders.forEach((date) => {
+      newTableData[date] = {};
+      groupHeaders.forEach((group) => {
+        const item = data.find((d) => d.date === date && d.group === group);
+        if (item) {
+          newTableData[date][group] = item.city.map(
+            (city) => Object.values(city)[0]
+          );
+        }
+      });
     });
-  });
+    setTableData(newTableData);
+  }, [data, dateHeaders, groupHeaders]);
+
+  const DnDTableCell = ({ children, date, group, setTableData, tableData }) => {
+    const [{ isDragging }, drag] = useDrag(() => ({
+      type: "cell",
+      item: { value: children, date, group } as DragItem,
+      collect: (monitor) => ({
+        isDragging: !!monitor.isDragging(),
+      }),
+    }));
+
+    const [{ isOver }, drop] = useDrop(() => ({
+      accept: "cell",
+      drop: (item: DragItem) => {
+        // 型を追加しました
+        const oldData =
+          tableData[item.date] && tableData[item.date][item.group]
+            ? tableData[item.date][item.group]
+            : "";
+        const newData =
+          tableData[date] && tableData[date][group]
+            ? tableData[date][group]
+            : "";
+        setTableData({
+          ...tableData,
+          [item.date]: {
+            ...(tableData[item.date] || {}),
+            [item.group]: newData,
+          },
+          [date]: { ...(tableData[date] || {}), [group]: oldData },
+        });
+      },
+      collect: (monitor) => ({
+        isOver: !!monitor.isOver(),
+      }),
+    }));
+
+    return (
+      <TableCell
+        key={`${date}-${group}`}
+        ref={(node) => drag(drop(node as any))}
+        style={{ cursor: "move", opacity: isDragging ? 0.5 : 1 }}
+      >
+        {children}
+      </TableCell>
+    );
+  };
 
   const headers = data.flatMap((item) =>
     item.city
@@ -153,7 +214,7 @@ const ObjectToList: React.FC = () => {
   );
 
   return (
-    <>
+    <DndProvider backend={HTML5Backend}>
       <p>{clickedText}</p>
       <ul>
         {objectList.tokyo.map((item, index) => (
@@ -179,20 +240,27 @@ const ObjectToList: React.FC = () => {
             {dateHeaders.map((date) => (
               <TableRow key={date}>
                 <TableCell>{date}</TableCell>
-                {groupHeaders.map((group) => (
-                  <TableCell
-                    key={`${date}-${group}`}
-                    onClick={() => handleClick(tableData[date][group])}
-                  >
-                    {tableData[date][group]}
-                  </TableCell>
-                ))}
+                {groupHeaders.map((group) =>
+                  tableData[date] && tableData[date][group]
+                    ? tableData[date][group].map((city, index) => (
+                        <DnDTableCell
+                          key={`${date}-${group}-${index}`}
+                          date={date}
+                          group={group}
+                          setTableData={setTableData}
+                          tableData={tableData}
+                        >
+                          {city}
+                        </DnDTableCell>
+                      ))
+                    : null
+                )}
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-    </>
+    </DndProvider>
   );
 };
 
