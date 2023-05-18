@@ -22,7 +22,7 @@ interface ObjectToList {
 
 interface TableData {
   [date: string]: {
-    [group: string]: string;
+    [group: string]: string[];
   };
 }
 
@@ -30,6 +30,14 @@ interface DragItem {
   value: string;
   date: string;
   group: string;
+}
+
+interface DnDTableCellProps {
+  children: React.ReactNode;
+  date: string;
+  group: string;
+  setTableData: React.Dispatch<React.SetStateAction<TableData>>;
+  tableData: TableData;
 }
 
 const ObjectToList: React.FC = () => {
@@ -136,14 +144,10 @@ const ObjectToList: React.FC = () => {
     setClickedText(text);
   };
 
-  // 列のヘッダを取得
   const groupHeaders = Array.from(new Set(data.map((item) => item.group)));
-
-  // 行のヘッダを取得
   const dateHeaders = Array.from(new Set(data.map((item) => item.date)));
   const [tableData, setTableData] = useState<TableData>({});
 
-  // 表のデータの作成は useEffect 内で行うべきです
   useEffect(() => {
     const newTableData: TableData = {};
 
@@ -158,10 +162,17 @@ const ObjectToList: React.FC = () => {
         }
       });
     });
+
     setTableData(newTableData);
   }, [data, dateHeaders, groupHeaders]);
 
-  const DnDTableCell = ({ children, date, group, setTableData, tableData }) => {
+  const DnDTableCell: React.FC<{
+    children: React.ReactNode;
+    date: string;
+    group: string;
+    setTableData: React.Dispatch<React.SetStateAction<TableData>>;
+    tableData: TableData;
+  }> = ({ children, date, group, setTableData, tableData }) => {
     const [{ isDragging }, drag] = useDrag(() => ({
       type: "cell",
       item: { value: children, date, group } as DragItem,
@@ -173,22 +184,25 @@ const ObjectToList: React.FC = () => {
     const [{ isOver }, drop] = useDrop(() => ({
       accept: "cell",
       drop: (item: DragItem) => {
-        // 型を追加しました
         const oldData =
           tableData[item.date] && tableData[item.date][item.group]
             ? tableData[item.date][item.group]
-            : "";
+            : [];
         const newData =
           tableData[date] && tableData[date][group]
             ? tableData[date][group]
-            : "";
-        setTableData({
-          ...tableData,
-          [item.date]: {
-            ...(tableData[item.date] || {}),
+            : [];
+        setTableData((prevTableData) => {
+          const newTableData: TableData = { ...prevTableData };
+          newTableData[item.date] = {
+            ...(newTableData[item.date] || {}),
             [item.group]: newData,
-          },
-          [date]: { ...(tableData[date] || {}), [group]: oldData },
+          };
+          newTableData[date] = {
+            ...(newTableData[date] || {}),
+            [group]: oldData,
+          };
+          return newTableData;
         });
       },
       collect: (monitor) => ({
