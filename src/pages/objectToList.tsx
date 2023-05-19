@@ -184,24 +184,20 @@ const ObjectToList: React.FC = () => {
     const [{ isOver }, drop] = useDrop(() => ({
       accept: "cell",
       drop: (item: DragItem) => {
-        const oldData =
-          tableData[item.date] && tableData[item.date][item.group]
-            ? tableData[item.date][item.group]
-            : [];
-        const newData =
-          tableData[date] && tableData[date][group]
-            ? tableData[date][group]
-            : [];
+        const oldData = [...tableData[item.date][item.group]];
+        const oldDataIndex = oldData.indexOf(item.value);
+        const newData = [...tableData[date][group]];
+        const newDataIndex = newData.indexOf(children as string);
+
+        if (oldDataIndex > -1 && newDataIndex > -1) {
+          oldData[oldDataIndex] = newData[newDataIndex];
+          newData[newDataIndex] = item.value;
+        }
+
         setTableData((prevTableData) => {
           const newTableData: TableData = { ...prevTableData };
-          newTableData[item.date] = {
-            ...(newTableData[item.date] || {}),
-            [item.group]: newData,
-          };
-          newTableData[date] = {
-            ...(newTableData[date] || {}),
-            [group]: oldData,
-          };
+          newTableData[item.date][item.group] = oldData;
+          newTableData[date][group] = newData;
           return newTableData;
         });
       },
@@ -254,20 +250,22 @@ const ObjectToList: React.FC = () => {
             {dateHeaders.map((date) => (
               <TableRow key={date}>
                 <TableCell>{date}</TableCell>
-                {groupHeaders.map((group) =>
-                  tableData[date] && tableData[date][group]
-                    ? tableData[date][group].map((city, index) => (
-                        <DnDTableCell
-                          key={`${date}-${group}-${index}`}
-                          date={date}
-                          group={group}
-                          setTableData={setTableData}
-                          tableData={tableData}
-                        >
-                          {city}
-                        </DnDTableCell>
-                      ))
-                    : null
+                {groupHeaders.map((group, index) =>
+                  tableData[date] && tableData[date][group] ? (
+                    <DnDTableCell
+                      key={`${date}-${group}`}
+                      date={date}
+                      group={group}
+                      setTableData={setTableData}
+                      tableData={tableData}
+                    >
+                      {tableData[date][group].map((city, index) => (
+                        <div key={`${date}-${group}-${index}`}>{city}</div>
+                      ))}
+                    </DnDTableCell>
+                  ) : (
+                    <TableCell key={index}></TableCell>
+                  )
                 )}
               </TableRow>
             ))}
