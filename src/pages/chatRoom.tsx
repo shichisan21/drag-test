@@ -1,27 +1,26 @@
-import { FC, ReactElement } from "react";
+import { FC, ReactElement, useState } from "react";
 import { useRouter } from "next/router";
+import Button from "@mui/material/Button";
+import { Container } from "@mui/material";
 
-interface AboutProps {
-  fruits: string[];
-}
+const ChatRoom: FC = (): ReactElement => {
+  const [cursor, setCursor] = useState("auto");
 
-const About: FC<AboutProps> = ({ fruits }): ReactElement => {
+  const handleClick = () => {
+    setCursor("copy");
+    setTimeout(() => setCursor("auto"), 10000);
+  };
+
   return (
-    <div>
-      <h1>test sssAbout</h1>
-      <ul>
-        {fruits.map((fruit) => (
-          <li key={fruit}>{fruit}</li>
-        ))}
-      </ul>
-    </div>
+    <Container sx={{ width: "100%", height: "100%" }}>
+      <div style={{ cursor }}>
+        <h1>test sssAbout</h1>
+        <Button variant='contained' style={{ cursor }} onClick={handleClick}>
+          Click me
+        </Button>
+      </div>
+    </Container>
   );
 };
 
-const AboutWrapper: FC = (): ReactElement => {
-  const router = useRouter();
-  const { fruits } = router.query;
-  return <About fruits={fruits as string[]} />;
-};
-
-export default AboutWrapper;
+export default ChatRoom;

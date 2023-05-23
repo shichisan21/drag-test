@@ -138,6 +138,13 @@ const SideMenu: FC<SideMenuProps> = () => {
         <Link href={address}>
           <ListItemButton>Page2</ListItemButton>
         </Link>
+        <Link
+          href={{
+            pathname: "/chatRoom",
+          }}
+        >
+          <ListItemButton>Chatroom</ListItemButton>
+        </Link>
         <ListItemButton onClick={handleClick}>
           <ListItemText primary='about' />
           {open ? <ExpandLess /> : <ExpandMore />}
