@@ -40,6 +40,13 @@ const SideMenu: FC<SideMenuProps> = () => {
         </Link>
         <Link
           href={{
+            pathname: "/CityDateTable",
+          }}
+        >
+          <ListItemButton>crossList</ListItemButton>
+        </Link>
+        <Link
+          href={{
             pathname: "/dragAndDrop",
             query: {
               fruits: [
