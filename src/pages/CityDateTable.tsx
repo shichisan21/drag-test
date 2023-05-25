@@ -38,8 +38,20 @@ const CityDateTable: React.FC = () => {
         <TableHead>
           <TableRow>
             <TableCell>Date / City</TableCell>
-            {allCities.map((city) => (
-              <TableCell key={city}>{city}</TableCell>
+            {allCities.map((city, index) => (
+              <TableCell
+                key={city}
+                style={{
+                  backgroundColor:
+                    city === "Tokyo" || city === "London"
+                      ? "#b3d9ff"
+                      : index % 2 === 0
+                      ? "#f2f2f2"
+                      : "#ffffff",
+                }}
+              >
+                {city}
+              </TableCell>
             ))}
           </TableRow>
         </TableHead>
@@ -49,8 +61,18 @@ const CityDateTable: React.FC = () => {
               <TableCell component='th' scope='row'>
                 {row.date}
               </TableCell>
-              {allCities.map((city) => (
-                <TableCell key={city}>
+              {allCities.map((city, index) => (
+                <TableCell
+                  key={city}
+                  style={{
+                    backgroundColor:
+                      city === "Tokyo" || city === "London"
+                        ? "#b3d9ff"
+                        : index % 2 === 0
+                        ? "#f2f2f2"
+                        : "#ffffff",
+                  }}
+                >
                   {row.cities.includes(city) ? "〇" : ""}
                 </TableCell>
               ))}
