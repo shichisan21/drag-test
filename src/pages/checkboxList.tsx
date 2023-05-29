@@ -1,6 +1,7 @@
 import * as React from "react";
 import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid";
 import Checkbox from "@mui/material/Checkbox";
+import { GridRowId } from "@mui/x-data-grid";
 
 const initialRows: GridRowsProp = Array(10)
   .fill(null)
@@ -16,7 +17,11 @@ const initialRows: GridRowsProp = Array(10)
 export default function CheckboxDataGrid() {
   const [rows, setRows] = React.useState(initialRows);
 
-  const handleCheckboxChange = (id, field, checked) => {
+  const handleCheckboxChange = (
+    id: GridRowId,
+    field: string,
+    checked: boolean
+  ) => {
     setRows((prevRows) => {
       const newRows = [...prevRows];
       const rowIndex = newRows.findIndex((row) => row.id === id);
@@ -100,12 +105,7 @@ export default function CheckboxDataGrid() {
 
   return (
     <div style={{ height: 400, width: "100%" }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={10}
-        rowsPerPageOptions={[10]}
-      />
+      <DataGrid rows={rows} columns={columns} />
     </div>
   );
 }
