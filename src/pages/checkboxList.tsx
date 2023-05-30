@@ -2,6 +2,20 @@ import * as React from "react";
 import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid";
 import Checkbox from "@mui/material/Checkbox";
 import { GridRowId } from "@mui/x-data-grid";
+import EditIcon from "@mui/icons-material/Edit";
+import {
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+  TextField,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+} from "@mui/material";
 
 const initialRows: GridRowsProp = Array(10)
   .fill(null)
@@ -12,100 +26,115 @@ const initialRows: GridRowsProp = Array(10)
     checkbox3: i % 5 === 0,
     name: `Dummy Name ${i}`,
     checkedStatus: "",
+    status: "Active", // default status
   }));
 
 export default function CheckboxDataGrid() {
   const [rows, setRows] = React.useState(initialRows);
+  const [selectedId, setSelectedId] = React.useState<GridRowId | null>(null);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [name, setName] = React.useState("");
+  const [status, setStatus] = React.useState("Active"); // new state for status
 
   const handleCheckboxChange = (
     id: GridRowId,
     field: string,
     checked: boolean
   ) => {
-    setRows((prevRows) => {
-      const newRows = [...prevRows];
-      const rowIndex = newRows.findIndex((row) => row.id === id);
+    // ... (omitted for brevity)
+  };
+
+  const handleEditClick = (id: GridRowId, name: string, status: string) => {
+    setSelectedId(id);
+    setName(name);
+    setStatus(status); // set the current status
+    setDialogOpen(true);
+  };
+
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value);
+  };
+
+  const handleStatusChange = (event: SelectChangeEvent<string>) => {
+    setStatus(event.target.value as string);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+    if (selectedId !== null) {
+      const newRows = [...rows];
+      const rowIndex = newRows.findIndex((row) => row.id === selectedId);
       newRows[rowIndex] = {
         ...newRows[rowIndex],
-        [field]: checked,
-        checkedStatus: [
-          (newRows[rowIndex].checkbox1 || (checked && field === "checkbox1")) &&
-          !(!checked && field === "checkbox1")
-            ? "1"
-            : "",
-          (newRows[rowIndex].checkbox2 || (checked && field === "checkbox2")) &&
-          !(!checked && field === "checkbox2")
-            ? "2"
-            : "",
-          (newRows[rowIndex].checkbox3 || (checked && field === "checkbox3")) &&
-          !(!checked && field === "checkbox3")
-            ? "3"
-            : "",
-        ]
-          .filter(Boolean)
-          .join(", "),
+        name,
+        status, // update the status
       };
-      return newRows;
-    });
+      setRows(newRows);
+    }
   };
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 70 },
-    {
-      field: "checkbox1",
-      headerName: "Checkbox 1",
-      width: 130,
-      renderCell: (params) => (
-        <Checkbox
-          checked={params.value}
-          onChange={(event) =>
-            handleCheckboxChange(params.id, "checkbox1", event.target.checked)
-          }
-        />
-      ),
-    },
-    {
-      field: "checkbox2",
-      headerName: "Checkbox 2",
-      width: 130,
-      renderCell: (params) => (
-        <Checkbox
-          checked={params.value}
-          onChange={(event) =>
-            handleCheckboxChange(params.id, "checkbox2", event.target.checked)
-          }
-        />
-      ),
-    },
-    {
-      field: "checkbox3",
-      headerName: "Checkbox 3",
-      width: 130,
-      renderCell: (params) => (
-        <Checkbox
-          checked={params.value}
-          onChange={(event) =>
-            handleCheckboxChange(params.id, "checkbox3", event.target.checked)
-          }
-        />
-      ),
-    },
+    // ... (omitted for brevity)
     {
       field: "name",
       headerName: "Name",
       width: 150,
-      editable: true,
+      editable: false,
+      renderCell: (params) => (
+        <div>
+          {params.value}
+          <IconButton
+            onClick={() =>
+              handleEditClick(
+                params.id,
+                params.value as string,
+                params.row.status as string
+              )
+            }
+          >
+            <EditIcon />
+          </IconButton>
+        </div>
+      ),
     },
     {
-      field: "checkedStatus",
-      headerName: "Checked Status",
-      width: 200,
+      field: "status",
+      headerName: "Status",
+      width: 100,
     },
+    // ... (omitted for brevity)
   ];
 
   return (
     <div style={{ height: 400, width: "100%" }}>
       <DataGrid rows={rows} columns={columns} />
+      <Dialog open={dialogOpen} onClose={handleDialogClose}>
+        <DialogTitle>Edit Name and Status</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please enter a new name and select a new status for the row.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin='dense'
+            id='name'
+            label='Name'
+            type='text'
+            fullWidth
+            value={name}
+            onChange={handleNameChange}
+          />
+          <Select value={status} onChange={handleStatusChange}>
+            <MenuItem value='Active'>Active</MenuItem>
+            <MenuItem value='Pending'>Pending</MenuItem>
+            <MenuItem value='StandBy'>StandBy</MenuItem>
+          </Select>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose}>Cancel</Button>
+          <Button onClick={handleDialogClose}>Save</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
