@@ -26,6 +26,13 @@ const SideMenu: FC<SideMenuProps> = () => {
       <List>
         <Link
           href={{
+            pathname: "/separateList",
+          }}
+        >
+          <ListItemButton>SeparateList</ListItemButton>
+        </Link>
+        <Link
+          href={{
             pathname: "/checkboxList",
           }}
         >
