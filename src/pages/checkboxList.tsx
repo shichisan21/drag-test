@@ -1,5 +1,6 @@
 import * as React from "react";
 import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid";
+import { createTheme, ThemeProvider } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import { GridRowId } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
@@ -27,7 +28,32 @@ const initialRows: GridRowsProp = Array(10)
     name: `Dummy Name ${i}`,
     checkedStatus: "",
     status: "Active", // default status
+    // Added new columns
+    column1: `Column1 Value ${i}`,
+    column2: `Column2 Value ${i}`,
+    column3: `Column3 Value ${i}`,
+    column4: `Column4 Value ${i}`,
+    column5: `Column5 Value ${i}`,
   }));
+
+// // Customize theme to hide grid lines
+// const theme = createTheme({
+//   components: {
+//     MuiDataGrid: {
+//       styleOverrides: {
+//         root: {
+//           borderColor: "transparent",
+//           "& .MuiDataGrid-row": {
+//             borderColor: "transparent",
+//           },
+//           "& .MuiDataGrid-cell": {
+//             borderColor: "transparent",
+//           },
+//         },
+//       },
+//     },
+//   },
+// });
 
 export default function CheckboxDataGrid() {
   const [rows, setRows] = React.useState(initialRows);
@@ -103,9 +129,40 @@ export default function CheckboxDataGrid() {
       width: 100,
     },
     // ... (omitted for brevity)
+    {
+      field: "column1",
+      headerName: "Column1",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "column2",
+      headerName: "Column2",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "column3",
+      headerName: "Column3",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "column4",
+      headerName: "Column4",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "column5",
+      headerName: "Column5",
+      width: 150,
+      editable: true,
+    },
   ];
 
   return (
+    // <ThemeProvider theme={theme}>
     <div style={{ height: 400, width: "100%" }}>
       <DataGrid rows={rows} columns={columns} />
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
@@ -136,5 +193,6 @@ export default function CheckboxDataGrid() {
         </DialogActions>
       </Dialog>
     </div>
+    // </ThemeProvider>
   );
 }
