@@ -26,6 +26,13 @@ const SideMenu: FC<SideMenuProps> = () => {
       <List>
         <Link
           href={{
+            pathname: "/SelectBoxGrid",
+          }}
+        >
+          <ListItemButton>SelectBoxGrid</ListItemButton>
+        </Link>
+        <Link
+          href={{
             pathname: "/checkBoxGrid",
           }}
         >
