@@ -21,9 +21,23 @@ const SideMenu: FC<SideMenuProps> = () => {
   const testParameter = "test";
   const address = `/post/${testParameter}`;
 
+  const dataArray = [
+    { id: 1, name: "John", group: "Tokyo" },
+    { id: 2, name: "Alice", group: "Osaka" },
+    // ...more rows...
+  ];
+
   return (
     <Drawer anchor='left' open={true} variant='persistent' sx={{ width: 240 }}>
       <List>
+        <Link
+          href={{
+            pathname: "/RadioGrid",
+            query: { data: JSON.stringify(dataArray) },
+          }}
+        >
+          <ListItemButton>RadioGrid</ListItemButton>
+        </Link>
         <Link
           href={{
             pathname: "/SelectBoxGrid",
