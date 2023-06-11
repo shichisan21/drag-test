@@ -1,7 +1,7 @@
 import { FC, ReactElement, useState } from "react";
-import { Container } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-import { Radio } from "@mui/material";
+import { Radio, RadioGroup, FormControlLabel } from "@mui/material";
 import { useRouter } from "next/router";
 
 interface DataRow {
@@ -12,25 +12,45 @@ interface DataRow {
 }
 
 const RadioGrid: FC = (): ReactElement => {
-  const [selectedValue, setSelectedValue] = useState<number | null>(null);
+  const [selectedValues, setSelectedValues] = useState<{
+    [key: string]: string;
+  }>({});
   const router = useRouter();
 
-  let dataArray: DataRow[] = [];
+  let dataArray: DataRow[] = [
+    { id: 1, name: "John", group: "Group A", age: 25, status: "Active" },
+    { id: 2, name: "Alice", group: "Group B", age: 30, status: "Inactive" },
+    { id: 3, name: "Bob", group: "Group A", age: 35, status: "Active" },
+    { id: 4, name: "Eve", group: "Group B", age: 28, status: "Active" },
+  ];
 
-  if (router.isReady) {
-    if (router.query.data) {
-      dataArray = JSON.parse(router.query.data as string);
-    }
-  }
-  const additionalColumns =
+  const additionalColumns: GridColDef[] =
     dataArray && dataArray.length > 0
       ? Object.keys(dataArray[0])
+          .filter((key) => !["group", "name"].includes(key))
           .map((key) => ({
             field: key,
-            headerName: dataArray[0][key] as string,
+            headerName: key,
             width: 200,
+            renderCell: (params: GridRenderCellParams<DataRow>) => {
+              return (
+                <RadioGroup
+                  value={selectedValues[key] || ""}
+                  onChange={(event) => {
+                    setSelectedValues((prevSelectedValues) => ({
+                      ...prevSelectedValues,
+                      [key]: event.target.value,
+                    }));
+                  }}
+                >
+                  <FormControlLabel
+                    value={params.row.id.toString()}
+                    control={<Radio />}
+                  />
+                </RadioGroup>
+              );
+            },
           }))
-          .filter((col) => !["group", "name"].includes(col.field))
       : [];
 
   const columns: GridColDef[] = [
@@ -39,24 +59,46 @@ const RadioGrid: FC = (): ReactElement => {
       field: "name",
       headerName: "Name",
       width: 200,
-      renderCell: (params: GridRenderCellParams) => {
+      renderCell: (params: GridRenderCellParams<DataRow>) => {
         return (
-          <Radio
-            checked={selectedValue === params.row.id}
-            onChange={() => {
-              setSelectedValue(params.row.id);
+          <RadioGroup
+            value={selectedValues["name"] || ""}
+            onChange={(event) => {
+              setSelectedValues((prevSelectedValues) => ({
+                ...prevSelectedValues,
+                name: event.target.value,
+              }));
             }}
-          />
+          >
+            <FormControlLabel
+              value={params.row.id.toString()}
+              control={<Radio />}
+            />
+          </RadioGroup>
         );
       },
     },
     ...additionalColumns,
   ];
 
+  const getSelectedRowGroup = (id: string) => {
+    const selectedRow = dataArray.find((row) => row.id.toString() === id);
+    return selectedRow ? selectedRow.group : "No selection";
+  };
   return (
     <>
       <Container>
-        <DataGrid rows={dataArray} columns={columns} sx={{ height: 900 }} />
+        <Typography variant='h6' gutterBottom>
+          Selected Groups:
+          {Object.values(selectedValues).map((value, index) => (
+            <Typography key={index}>{getSelectedRowGroup(value)}</Typography>
+          ))}
+        </Typography>
+        <DataGrid<DataRow>
+          rows={dataArray}
+          columns={columns}
+          sx={{ height: 900 }}
+        />
       </Container>
     </>
   );
