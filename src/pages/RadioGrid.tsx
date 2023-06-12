@@ -1,4 +1,4 @@
-import { FC, ReactElement, useState } from "react";
+import { FC, ReactElement, useState, useEffect } from "react";
 import { Container, Typography } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Radio, RadioGroup, FormControlLabel } from "@mui/material";
@@ -11,11 +11,6 @@ interface DataRow {
   groupId: number;
 }
 
-interface GroupRow {
-  groupId: number;
-  group: string;
-}
-
 const RadioGrid: FC = (): ReactElement => {
   let data = {
     arr1: [
@@ -26,20 +21,20 @@ const RadioGrid: FC = (): ReactElement => {
     ],
   };
 
-  // Set initial state of the radio buttons according to the group value of each row
-  const [selectedValues, setSelectedValues] = useState(
-    data.arr1.reduce((acc, row) => {
-      acc[row.name] = row.id.toString();
-      return acc;
-    }, {})
+  const [selectedValues, setSelectedValues] = useState<Record<string, string>>(
+    {}
   );
 
+  useEffect(() => {
+    const initialValues: Record<string, string> = {};
+    for (const row of data.arr1) {
+      initialValues[row.name] = row.id.toString();
+    }
+    setSelectedValues(initialValues);
+  }, []);
+
   const columns: GridColDef[] = [
-    {
-      field: "group",
-      headerName: "Group",
-      width: 200,
-    },
+    { field: "group", headerName: "Group", width: 200 },
     ...data.arr1.map((row: DataRow) => ({
       field: row.name,
       headerName: row.name,
